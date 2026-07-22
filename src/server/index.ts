@@ -1,13 +1,12 @@
-import { OpenAPIHono, createRoute, z } from "@hono/zod-openapi";
-import { initDB, query, get, run } from "./db.js";
+import { createApp, createRoute, z } from "@clawnify/app";
+import { query, get, run } from "./db.js";
 
 type Env = { Bindings: { DB: D1Database } };
 
-const app = new OpenAPIHono<Env>();
-
-app.use("*", async (c, next) => {
-  initDB(c.env);
-  await next();
+const app = createApp<Env>({
+  title: "Open Docs API",
+  version: "1.0.0",
+  description: "A Notion-style document workspace with nested pages and block-based editing.",
 });
 
 // ── DB Row Types ──────────────────────────────────────────────────
@@ -447,17 +446,6 @@ app.openapi(deleteBlock, async (c) => {
   const result = await run("DELETE FROM blocks WHERE id = ?", [id]);
   if (result.changes === 0) return c.json({ error: "Block not found" }, 404);
   return c.json({ ok: true }, 200);
-});
-
-// ── OpenAPI Doc ───────────────────────────────────────────────────
-
-app.doc("/openapi.json", {
-  openapi: "3.0.0",
-  info: {
-    title: "Open Docs API",
-    version: "1.0.0",
-    description: "A Notion-style document workspace with nested pages and block-based editing.",
-  },
 });
 
 export default app;
