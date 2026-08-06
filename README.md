@@ -1,5 +1,7 @@
 # Open Docs
 
+[![Deploy with Clawnify](https://app.clawnify.com/deploy-button.svg)](https://app.clawnify.com/deploy?repo=clawnify/open-docs)
+
 An open-source Notion alternative with nested pages, block-based editing, and slash commands. Built with **Preact + Hono + SQLite**. Deploys to Cloudflare Workers via [Clawnify](https://clawnify.com).
 
 ## Features
