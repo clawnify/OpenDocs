@@ -1,6 +1,6 @@
 {
   "$schema": "https://app.clawnify.com/schema/v1/clawnify.json",
-  "name": "Open Docs",
+  "name": "OpenDocs",
   "description": "A Notion-style document workspace with nested pages, block-based editing, and slash commands",
   "app": {
     "framework": "preact+hono",

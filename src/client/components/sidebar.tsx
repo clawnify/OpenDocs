@@ -74,7 +74,7 @@ export function Sidebar() {
       <div class="sidebar-header">
         <div class="sidebar-logo">
           <FileText size={18} />
-          <span>Open Docs</span>
+          <span>OpenDocs</span>
         </div>
       </div>
 

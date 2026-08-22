@@ -4,7 +4,7 @@ import { query, get, run } from "./db.js";
 type Env = { Bindings: { DB: D1Database } };
 
 const app = createApp<Env>({
-  title: "Open Docs API",
+  title: "OpenDocs API",
   version: "1.0.0",
   description: "A Notion-style document workspace with nested pages and block-based editing.",
 });

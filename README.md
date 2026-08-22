@@ -1,4 +1,4 @@
-# Open Docs
+# OpenDocs
 
 [![Deploy with Clawnify](https://app.clawnify.com/deploy-button.svg)](https://app.clawnify.com/deploy?repo=clawnify/open-docs)
 
