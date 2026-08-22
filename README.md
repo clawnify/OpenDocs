@@ -1,6 +1,6 @@
 # OpenDocs
 
-[![Deploy with Clawnify](https://app.clawnify.com/deploy-button.svg)](https://app.clawnify.com/deploy?repo=clawnify/open-docs)
+[![Deploy with Clawnify](https://app.clawnify.com/deploy-button.svg)](https://app.clawnify.com/deploy?repo=clawnify/OpenDocs)
 
 An open-source Notion alternative with nested pages, block-based editing, and slash commands. Built with **Preact + Hono + SQLite**. Deploys to Cloudflare Workers via [Clawnify](https://clawnify.com).
 
@@ -20,7 +20,7 @@ An open-source Notion alternative with nested pages, block-based editing, and sl
 ## Quickstart
 
 ```bash
-git clone https://github.com/clawnify/open-docs.git
+git clone https://github.com/clawnify/OpenDocs.git
 cd open-docs
 pnpm install
 ```
