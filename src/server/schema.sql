@@ -24,26 +24,8 @@ CREATE TABLE IF NOT EXISTS blocks (
 CREATE INDEX IF NOT EXISTS idx_blocks_page ON blocks(page_id, position);
 CREATE INDEX IF NOT EXISTS idx_pages_parent ON pages(parent_id, position);
 
--- Seed: a welcome page with some blocks
-INSERT OR IGNORE INTO pages (id, title, icon) VALUES ('welcome', 'Welcome to OpenDocs', '👋');
-
-INSERT OR IGNORE INTO blocks (id, page_id, type, content, position) VALUES
-  ('b1', 'welcome', 'heading_1', 'Welcome to OpenDocs', 0),
-  ('b2', 'welcome', 'paragraph', 'A powerful, open-source document workspace inspired by Notion. Create nested pages, write with blocks, and organize your knowledge.', 1),
-  ('b3', 'welcome', 'heading_2', 'Getting Started', 2),
-  ('b4', 'welcome', 'bulleted_list', 'Click the + button in the sidebar to create a new page', 3),
-  ('b5', 'welcome', 'bulleted_list', 'Type / to open the slash command menu and insert different block types', 4),
-  ('b6', 'welcome', 'bulleted_list', 'Nest pages by dragging them under other pages in the sidebar', 5),
-  ('b7', 'welcome', 'callout', 'Tip: Use keyboard shortcuts like Ctrl+B for bold, Ctrl+I for italic, and Ctrl+E for inline code.', 6),
-  ('b8', 'welcome', 'heading_2', 'Block Types', 7),
-  ('b9', 'welcome', 'paragraph', 'OpenDocs supports many block types:', 8),
-  ('b10', 'welcome', 'bulleted_list', 'Headings (H1, H2, H3)', 9),
-  ('b11', 'welcome', 'bulleted_list', 'Paragraphs with rich text', 10),
-  ('b12', 'welcome', 'bulleted_list', 'Bulleted and numbered lists', 11),
-  ('b13', 'welcome', 'bulleted_list', 'To-do checkboxes', 12),
-  ('b14', 'welcome', 'bulleted_list', 'Toggle blocks', 13),
-  ('b15', 'welcome', 'bulleted_list', 'Code blocks', 14),
-  ('b16', 'welcome', 'bulleted_list', 'Quotes and callouts', 15),
-  ('b17', 'welcome', 'bulleted_list', 'Dividers', 16),
-  ('b18', 'welcome', 'divider', '', 17),
-  ('b19', 'welcome', 'quote', 'The best way to predict the future is to create it.', 18);
+-- No sample data here. Clawnify applies this file as DDL only: the deploy
+-- pipeline rejects any statement that is not CREATE TABLE/INDEX/VIEW/TRIGGER
+-- or ALTER TABLE ... ADD COLUMN, so a single INSERT fails the whole deploy.
+-- The welcome page and its blocks are seeded by ensureSeeded() in
+-- src/server/index.ts, on the first request against an empty database.

@@ -9,6 +9,68 @@ const app = createApp<Env>({
   description: "A Notion-style document workspace with nested pages and block-based editing.",
 });
 
+// ── Sample data ───────────────────────────────────────────────────
+//
+// The welcome page used to live as INSERT statements in schema.sql. Clawnify
+// applies that file as DDL only and rejects anything else, so the seed moved
+// here: it runs once, on the first request against an empty database.
+
+const WELCOME_PAGE = { id: "welcome", title: "Welcome to OpenDocs", icon: "👋" };
+
+const WELCOME_BLOCKS: Array<[id: string, type: string, content: string, position: number]> = [
+  ["b1", "heading_1", "Welcome to OpenDocs", 0],
+  ["b2", "paragraph", "A powerful, open-source document workspace inspired by Notion. Create nested pages, write with blocks, and organize your knowledge.", 1],
+  ["b3", "heading_2", "Getting Started", 2],
+  ["b4", "bulleted_list", "Click the + button in the sidebar to create a new page", 3],
+  ["b5", "bulleted_list", "Type / to open the slash command menu and insert different block types", 4],
+  ["b6", "bulleted_list", "Nest pages by dragging them under other pages in the sidebar", 5],
+  ["b7", "callout", "Tip: Use keyboard shortcuts like Ctrl+B for bold, Ctrl+I for italic, and Ctrl+E for inline code.", 6],
+  ["b8", "heading_2", "Block Types", 7],
+  ["b9", "paragraph", "OpenDocs supports many block types:", 8],
+  ["b10", "bulleted_list", "Headings (H1, H2, H3)", 9],
+  ["b11", "bulleted_list", "Paragraphs with rich text", 10],
+  ["b12", "bulleted_list", "Bulleted and numbered lists", 11],
+  ["b13", "bulleted_list", "To-do checkboxes", 12],
+  ["b14", "bulleted_list", "Toggle blocks", 13],
+  ["b15", "bulleted_list", "Code blocks", 14],
+  ["b16", "bulleted_list", "Quotes and callouts", 15],
+  ["b17", "bulleted_list", "Dividers", 16],
+  ["b18", "divider", "", 17],
+  ["b19", "quote", "The best way to predict the future is to create it.", 18],
+];
+
+let seeded = false;
+
+async function ensureSeeded(): Promise<void> {
+  if (seeded) return;
+  try {
+    // Only ever seed an empty workspace, so a redeploy or a cold isolate never
+    // resurrects a page the user deleted.
+    const count = await get<{ n: number }>("SELECT COUNT(*) as n FROM pages");
+    if ((count?.n ?? 0) === 0) {
+      await run(
+        "INSERT OR IGNORE INTO pages (id, title, icon) VALUES (?, ?, ?)",
+        [WELCOME_PAGE.id, WELCOME_PAGE.title, WELCOME_PAGE.icon]
+      );
+      for (const [id, type, content, position] of WELCOME_BLOCKS) {
+        await run(
+          "INSERT OR IGNORE INTO blocks (id, page_id, type, content, position) VALUES (?, ?, ?, ?, ?)",
+          [id, WELCOME_PAGE.id, type, content, position]
+        );
+      }
+    }
+    seeded = true;
+  } catch {
+    // Sample data must never fail a request; retry on the next one.
+    seeded = false;
+  }
+}
+
+app.use("*", async (_c, next) => {
+  await ensureSeeded();
+  await next();
+});
+
 // ── DB Row Types ──────────────────────────────────────────────────
 
 interface PageRow {
