@@ -1,3 +1,4 @@
+import { reportLocation } from "@clawnify/app/client";
 import { useEffect } from "preact/hooks";
 import { DocsContext } from "./context";
 import { useRouter } from "./hooks/use-router";
@@ -9,6 +10,7 @@ import { EmptyState } from "./components/empty-state";
 export function App() {
   const { path, navigate, pageId } = useRouter();
   const docs = useDocs();
+  useEffect(() => { reportLocation(window.location.pathname + window.location.search); }, [path]);
 
   // Load page when URL changes
   useEffect(() => {

@@ -1,3 +1,4 @@
+import { AppNav, embedded } from "@clawnify/app/client";
 import { useState, useMemo } from "preact/hooks";
 import { useDocsContext } from "../context";
 import type { Page, PageTreeNode } from "../types";
@@ -68,6 +69,21 @@ export function Sidebar() {
     setMenuOpenId(null);
     await updatePage(page.id, { is_favorite: page.is_favorite ? 0 : 1 } as Partial<Page>);
   };
+
+  if (embedded) {
+    const pageLabel = (page: Page) => {
+      const parent = pages.find(p => p.id === page.parent_id);
+      return parent ? `${parent.title || "Untitled"} / ${page.title || "Untitled"}` : page.title || "Untitled";
+    };
+    return <AppNav title="Docs" icon="file-text" active={activePage?.id}
+      groups={[
+        { label: "Pages", items: pages.map(page => ({
+          id: page.id, label: pageLabel(page), href: `/page/${page.id}`, icon: page.is_favorite ? "star" : "file-text",
+        })) },
+        { items: [{ id: "new-page", label: "New page", icon: "plus" }] },
+      ]}
+      onNavigate={item => { if (item.id === "new-page") void handleCreate(); else navigate(item.href!); }} />;
+  }
 
   return (
     <aside class="sidebar">
