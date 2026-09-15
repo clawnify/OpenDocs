@@ -1,3 +1,4 @@
+import { embedded } from "@clawnify/app/client";
 import { useState, useRef, useCallback } from "preact/hooks";
 import { useDocsContext } from "../context";
 import { BlockEditor } from "./block-editor";
@@ -6,7 +7,7 @@ import { SmilePlus, Save, Check } from "lucide-preact";
 const PAGE_ICONS = ["📄", "📝", "📋", "📌", "📎", "📁", "📂", "📊", "📈", "🎯", "🚀", "💡", "🔥", "⭐", "🎨", "🔧", "📚", "🏠", "💼", "🎬", "🌍", "❤️", "✅", "🔒", "🎵", "👋", "🐛", "🧪"];
 
 export function PageView() {
-  const { activePage, updatePage, saving } = useDocsContext();
+  const { activePage, updatePage, saving, createPage, deletePage, navigate } = useDocsContext();
   const [editingTitle, setEditingTitle] = useState(false);
   const [showIconPicker, setShowIconPicker] = useState(false);
   const titleRef = useRef<HTMLInputElement>(null);
@@ -38,6 +39,13 @@ export function PageView() {
 
   return (
     <div class="page-view">
+      {embedded && <div class="page-actions" style={{ display: "flex", flexWrap: "wrap", gap: 8, padding: "16px 0" }}>
+        <button class="btn" onClick={async () => { const page = await createPage(activePage.id); navigate(`/page/${page.id}`); }}>Add sub-page</button>
+        <button class="btn" onClick={() => updatePage(activePage.id, { is_favorite: activePage.is_favorite ? 0 : 1 })}>
+          {activePage.is_favorite ? "Remove from favorites" : "Add to favorites"}
+        </button>
+        <button class="btn" onClick={async () => { await deletePage(activePage.id); navigate("/"); }}>Delete page</button>
+      </div>}
       <div class="page-header">
         <div class="page-header-top">
           <div class="page-icon-wrapper" onClick={() => setShowIconPicker(!showIconPicker)}>
