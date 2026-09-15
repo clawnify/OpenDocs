@@ -80,7 +80,7 @@ export function Sidebar() {
         { label: "Pages", items: pages.map(page => ({
           id: page.id, label: pageLabel(page), href: `/page/${page.id}`, icon: page.is_favorite ? "star" : "file-text",
         })) },
-        { items: [{ id: "new-page", label: "New page", icon: "plus" }] },
+        { items: [{ id: "new-page", label: "New page", icon: "file-text" }] },
       ]}
       onNavigate={item => { if (item.id === "new-page") void handleCreate(); else navigate(item.href!); }} />;
   }
